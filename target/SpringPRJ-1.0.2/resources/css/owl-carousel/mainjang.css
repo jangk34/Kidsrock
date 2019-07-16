@@ -1,0 +1,10 @@
+.greyRule { 
+background: #CECECE; 
+width: 450px; 
+height: 1px; 
+padding: 0; 
+margin: 0; 
+} 
+.greyRule hr { 
+display: none; 
+} 

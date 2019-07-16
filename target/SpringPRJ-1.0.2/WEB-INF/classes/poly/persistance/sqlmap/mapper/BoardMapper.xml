@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.BoardMapper">
+
+
+<select id="getBoardList" resultType="BoardDTO">
+		SELECT WRITING_IN AS notice_seq,
+				TITLE AS title,
+				CONTENTS AS contents,
+				WRITER_IN AS user_in,	
+				NAME AS user_name	
+					
+		FROM BOARD_TB
+		ORDER BY notice_seq ASC
+	</select>	
+	
+	<select id="getBoardDetail" parameterType="string" resultType="BoardDTO"> <!-- 매개변수가 string -->
+		SELECT WRITING_IN AS notice_seq,
+				TITLE AS title,
+				CONTENTS AS contents,
+				WRITER_IN AS user_in,	
+				NAME AS user_name		
+		FROM BOARD_TB
+		WHERE WRITING_IN = #{writing_in} <!-- 메서드를 불러올 때 userNo를 받았음, 조건절로 조회구문 작성 -->
+	</select>
+	
+	<delete id="deleteBoard" parameterType="string"> <!-- userDelete 메소드를 호출할 때 실행되는 sql작성  인자값은 string이여야 함(userNo) -->
+	 	DELETE FROM BOARD_TB
+	 	WHERE WRITING_IN = #{writing_in} <!-- 메서드를 불러올 때 인자로 받은 userNo를  사용하여 회원 삭제--> 
+	 
+	 </delete>
+	 
+	 <update id="updateBoardDTO" parameterType="BoardDTO">
+	 	UPDATE BOARD_TB
+	 	SET 
+	 		TITLE = #{title}, <!-- 2222  -->
+	 		CONTENTS = #{contents}	<!-- 3333  -->
+	 			<!-- 4444  -->
+	 	
+	 	WHERE WRITING_IN = #{notice_seq} <!--컴마 주의  --> <!-- dto변수 -->
+	 	
+	 </update>
+	 
+	 <!-- insert문을 사용할 떄는 꺽쇠 태그 -->
+	<insert id="insertBoardDTO" parameterType="BoardDTO"> <!-- UserDTO라는 객체가 넘어옴 -->
+		INSERT INTO BOARD_TB
+		(
+			WRITING_IN,
+			TITLE,
+			CONTENTS,
+			WRITER_IN
+		)
+		VALUES
+		( 
+			BOARD_NO.NEXTVAL, <!-- 시퀀스 사용 --> 
+			 <!-- 객체내의 멤버변수 이름만 적어 주어도 됨 -->
+			#{title}, 
+			#{contents},
+			#{user_in}
+		)
+		
+	</insert>
+
+</mapper>

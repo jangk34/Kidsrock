@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.FainfoMapper">
+	<!-- 게시판 등록 -->
+	<!-- 오라클 -->
+	<insert id="insertFainfo" parameterType="FaDTO">
+		INSERT INTO FA_INFO
+		(
+		FANO,
+		FANAME,
+		FACONTENT,
+		REGNO,
+		REGDATE,
+		UPDNO,
+		UPDDATE,
+		FAPOSTADDR,
+		FAADDR1,
+		FAADDR2,
+		OPENDATE,
+		FAOPT,
+		FACLT
+		)
+		VALUES
+		(
+		#{faNo},
+		#{faName},
+		#{faContent},
+		#{regNo},
+		NOW(),
+		#{updNo},
+		NOW(),
+		#{faPostaddr},
+		#{faAddr1},
+		#{faAddr2},
+		#{faOpendate},
+		#{faOpt},
+		#{faClt}
+		)
+	</insert>
+	<!-- 시설 정보  -->
+	<select id="getFainfoList" resultType="FaDTO">
+		SELECT 
+		FANO,
+		FANAME,
+		FACONTENT,
+		REGNO,
+		REGDATE,
+		UPDNO,
+		UPDDATE,
+		FAPOSTADDR,
+		FAADDR1,
+		FAADDR2,
+		OPENDATE,
+		FAOPT,
+		FACLT
+		FROM FA_INFO
+
+	</select>
+	
+	<!-- 시설 상세  -->
+	<select id="getFainfoDetail" parameterType="FaDTO"
+		resultType="FaDTO">
+	SELECT 
+	F.FANO AS FaNo,
+	F.FANAME AS FaName,
+	F.FACONTENT AS FaContent,
+	F.FAPOSTADDR AS FapostAddr,
+	F.FAADDR1 AS FaAddr1,
+	F.FAADDR2 AS FaAddr2,
+	F.OPENDATE AS OpenDate,
+	FAOPT AS FaOpt,
+	FACLT AS FaClt,
+	FATEL AS FaTel
+	FROM FA_INFO F
+	WHERE FANO=#{fano}
+	
+	</select>
+	
+	
+	<!-- 추천 시설 정보  -->
+	<select id="getFagd" resultType="FaDTO">
+		SELECT 
+		FANO,
+		FANAME,
+		FACONTENT,
+		REGNO,
+		REGDATE,
+		UPDNO,
+		UPDDATE,
+		FAPOSTADDR,
+		FAADDR1,
+		FAADDR2,
+		OPENDATE,
+		FAOPT,
+		FACLT
+		FROM FA_INFO
+
+	</select>
+	
+	<!-- 시설 상세  -->
+	<select id="getFagdDetail" parameterType="FaDTO"
+		resultType="FaDTO">
+	SELECT 
+	F.FANO AS FaNo,
+	F.FANAME AS FaName,
+	F.FACONTENT AS FaContent,
+	F.FAPOSTADDR AS FapostAddr,
+	F.FAADDR1 AS FaAddr1,
+	F.FAADDR2 AS FaAddr2,
+	F.OPENDATE AS OpenDate,
+	FAOPT AS FaOpt,
+	FACLT AS FaClt,
+	FATEL AS FaTel
+	FROM FA_INFO F
+	WHERE FANO=#{fano}
+	
+	</select>
+</mapper>

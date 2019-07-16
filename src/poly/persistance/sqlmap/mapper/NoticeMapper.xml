@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.NoticeMapper">
+	<!-- 게시판 등록 -->
+	<!-- 오라클 -->
+	<insert id="insertNotice" parameterType="NoticeDTO">
+		INSERT INTO FA_NOTICE
+		(
+		NTTITLE,
+		NTCONT,
+		NTWRITER,
+		NTCOUNT,
+		REGNO,
+		REGDATE,
+		UPDNO,
+		UPDDATA,
+		)
+		VALUES
+		(
+		#{ntTitle},
+		#{ntCont},
+		#{ntWriter},
+		0,
+		#{regNo},
+		NOW(),
+		#{updNo},
+		NOW()
+		)
+	</insert> 
+
+	<!-- mysql -->
+	<select id="getNoticeList" resultType="NoticeDTO">
+		SELECT 
+		FANTNO,
+		NTWRITER,
+		NTTITLE,
+		NTCONT,
+	    NTCOUNT,
+		REGDATE,
+		REGNO,
+		UPDDATE,
+		UPDNO,
+		IFNULL(NTCOUNT,0)
+		FROM FA_NOTICE 
+
+	</select>
+	
+	<!-- 게시판카운트 -->
+	<update id="updateNoticeCount" parameterType="string">
+		UPDATE FA_NOTICE
+		SET NTCOUNT =NTCOUNT+1
+		WHERE FANTNO=#{fantNo}
+	</update>
+	
+	<!-- 게시판 상세  -->
+	<select id="getNoticeDetail" parameterType="NoticeDTO"
+		resultType="NoticeDTO">
+
+	SELECT U.NAME AS ntWriter,
+	N.FANTNO AS FantNo,
+	N.NTTITLE AS ntTitle,
+	N.NTCONT AS ntCont,
+	N.REGNO AS regNo,
+	N.REGDATE AS regDate,
+	N.UPDDATE AS updDate,
+	N.UPDNO AS updNo,
+	IFNULL(N.NTCOUNT,0) AS ntCount
+	FROM USER_INFO U
+	INNER JOIN FA_NOTICE N
+	ON U.USERNO = N.REGNO AND
+	FANTNO=#{fantNo}
+		
+	</select>
+	
+	<!-- 답변 게시판 상세 -->
+	<!--  mysql 은 계층 쿼리 안먹힘 -->
+	<select id="getAnswerNoticeDetail" parameterType="string"
+		resultType="NoticeDTO">
+
+		SELECT NTTITLE AS "NTTITLE" ,NTCONT AS "NTCONT", REGDATE
+		FROM FA_NOTICE
+		WHERE REGNO=1
+
+	</select>
+	<!-- 답글 중복체크 -->
+	<select id="getAnswerCheck" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM FA_NOTICE
+		</select>
+	<!-- ,
+		1 as enabled -->
+</mapper>
